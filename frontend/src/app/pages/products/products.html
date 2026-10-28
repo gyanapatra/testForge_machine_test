@@ -1,0 +1,213 @@
+<div class="products-page">
+
+  <header class="page-header">
+    <div>
+      <a routerLink="/dashboard" class="back-link">← Dashboard</a>
+      <h1>Product Management</h1>
+      <p>Manage your product inventory.</p>
+    </div>
+
+    <button class="primary-button" (click)="openCreateForm()">
+      + Add Product
+    </button>
+  </header>
+
+  <div class="alert error-alert" *ngIf="errorMessage">
+    {{ errorMessage }}
+  </div>
+
+  <div class="alert success-alert" *ngIf="successMessage">
+    {{ successMessage }}
+  </div>
+
+  <section class="product-form-card" *ngIf="showForm">
+    <h2>{{ editingId === null ? 'Create Product' : 'Edit Product' }}</h2>
+
+    <form #productForm="ngForm" (ngSubmit)="saveProduct()">
+      <div class="form-grid">
+
+        <div class="form-group">
+          <label for="name">Product Name *</label>
+          <input
+            id="name"
+            name="name"
+            [(ngModel)]="form.name"
+            required
+            maxlength="150"
+            placeholder="Enter product name"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="price">Price *</label>
+          <input
+            id="price"
+            name="price"
+            type="number"
+            [(ngModel)]="form.price"
+            required
+            min="0"
+            step="0.01"
+          />
+        </div>
+
+        <div class="form-group full-width">
+          <label for="description">Description</label>
+          <textarea
+            id="description"
+            name="description"
+            [(ngModel)]="form.description"
+            rows="3"
+            placeholder="Enter product description"
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="quantity">Quantity *</label>
+          <input
+            id="quantity"
+            name="quantity"
+            type="number"
+            [(ngModel)]="form.quantity"
+            required
+            min="0"
+            step="1"
+          />
+        </div>
+
+      </div>
+
+      <div class="form-actions">
+        <button
+          type="button"
+          class="secondary-button"
+          (click)="cancelForm()"
+        >
+          Cancel
+        </button>
+
+        <button
+          type="submit"
+          class="primary-button"
+          [disabled]="productForm.invalid || saving"
+        >
+          {{ saving ? 'Saving...' : (editingId === null ? 'Create Product' : 'Update Product') }}
+        </button>
+      </div>
+    </form>
+  </section>
+
+  <section class="toolbar">
+    <div>
+      <h2>Products</h2>
+      <p>{{ totalElements }} product(s) found</p>
+    </div>
+
+    <form class="search-form" (ngSubmit)="searchProducts()">
+      <input
+        name="search"
+        [(ngModel)]="search"
+        placeholder="Search products..."
+      />
+      <button type="submit" class="secondary-button">Search</button>
+    </form>
+  </section>
+
+  <section class="table-card">
+
+    <div class="loading-state" *ngIf="loading">
+      Loading products...
+    </div>
+
+    <div class="empty-state" *ngIf="!loading && products.length === 0">
+      <h3>No products found</h3>
+      <p>Create a product to get started.</p>
+    </div>
+
+    <div class="table-wrapper" *ngIf="!loading && products.length > 0">
+      <table>
+        <thead>
+          <tr>
+            <th>ID</th>
+            <th>
+              <button class="sort-button" (click)="changeSort('name')">
+                Product Name
+                <span *ngIf="sortBy === 'name'">
+                  {{ direction === 'asc' ? '↑' : '↓' }}
+                </span>
+              </button>
+            </th>
+            <th>Description</th>
+            <th>
+              <button class="sort-button" (click)="changeSort('price')">
+                Price
+                <span *ngIf="sortBy === 'price'">
+                  {{ direction === 'asc' ? '↑' : '↓' }}
+                </span>
+              </button>
+            </th>
+            <th>
+              <button class="sort-button" (click)="changeSort('quantity')">
+                Quantity
+                <span *ngIf="sortBy === 'quantity'">
+                  {{ direction === 'asc' ? '↑' : '↓' }}
+                </span>
+              </button>
+            </th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+
+        <tbody>
+          <tr *ngFor="let product of products">
+            <td>{{ product.id }}</td>
+            <td class="product-name">{{ product.name }}</td>
+            <td class="description-cell">
+              {{ product.description || '—' }}
+            </td>
+            <td>{{ product.price | currency:'INR':'symbol':'1.2-2' }}</td>
+            <td>{{ product.quantity }}</td>
+            <td>
+              <div class="row-actions">
+                <button
+                  class="edit-button"
+                  (click)="openEditForm(product)"
+                >
+                  Edit
+                </button>
+                <button
+                  class="delete-button"
+                  (click)="deleteProduct(product)"
+                >
+                  Delete
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tbody>
+      </table>
+    </div>
+
+    <footer class="pagination" *ngIf="!loading && totalPages > 0">
+      <span>Page {{ page + 1 }} of {{ totalPages }}</span>
+
+      <div>
+        <button
+          class="secondary-button"
+          (click)="previousPage()"
+          [disabled]="page === 0"
+        >
+          Previous
+        </button>
+        <button
+          class="secondary-button"
+          (click)="nextPage()"
+          [disabled]="page + 1 >= totalPages"
+        >
+          Next
+        </button>
+      </div>
+    </footer>
+
+  </section>
+</div>

@@ -1,0 +1,106 @@
+<div class="dashboard-layout">
+
+  <aside class="sidebar">
+    <div class="brand">
+      <div class="brand-icon">T</div>
+      <div>
+        <h2>TestForge</h2>
+        <span>Machine Test Application</span>
+      </div>
+    </div>
+
+    <nav class="navigation">
+      <a routerLink="/dashboard" routerLinkActive="active">
+        Dashboard
+      </a>
+
+      <a routerLink="/products" routerLinkActive="active">
+        Products
+      </a>
+
+      @if (isAdmin) {
+        <a routerLink="/settings" routerLinkActive="active">
+          Settings
+        </a>
+      }
+    </nav>
+
+    <div class="sidebar-footer">
+      <span>Logged in as</span>
+      <strong>{{ username }}</strong>
+      <span class="role-badge">{{ role }}</span>
+      <button class="logout-button" (click)="logout()">
+        Sign out
+      </button>
+    </div>
+  </aside>
+
+  <main class="main-content">
+
+    <header class="topbar">
+      <div>
+        <h1>Dashboard</h1>
+        <p>Welcome to your workspace.</p>
+      </div>
+
+      <div class="user-avatar">
+        {{ username.charAt(0).toUpperCase() }}
+      </div>
+    </header>
+
+    <section class="welcome-card">
+      <div>
+        <span class="eyebrow">YOUR WORKSPACE</span>
+        <h2>Welcome back, {{ username }}!</h2>
+        <p>
+          You have successfully signed in to the TestForge Machine Test
+          Application.
+        </p>
+      </div>
+
+      <div class="welcome-icon">T</div>
+    </section>
+
+    <section class="section-heading">
+      <h2>Quick access</h2>
+      <p>Navigate to the features available to your account.</p>
+    </section>
+
+    <section class="feature-grid">
+
+      <article class="feature-card">
+        <div class="feature-icon products-icon">P</div>
+        <h3>Product Management</h3>
+        <p>Create, view, update, and delete products.</p>
+        <a routerLink="/products">Manage products →</a>
+      </article>
+
+      <article class="feature-card">
+        <div class="feature-icon account-icon">A</div>
+        <h3>Account</h3>
+        <p>View your current account information.</p>
+        <div class="account-details">
+          <span>Username</span>
+          <strong>{{ username }}</strong>
+          <span>Role</span>
+          <strong>{{ role }}</strong>
+        </div>
+      </article>
+
+      @if (isAdmin) {
+        <article class="feature-card">
+          <div class="feature-icon settings-icon">S</div>
+          <h3>Administration</h3>
+          <p>Access administrator-only settings.</p>
+          <a routerLink="/settings">Open settings →</a>
+        </article>
+      }
+
+    </section>
+
+    <footer class="page-footer">
+      TestForge · Machine Test Application
+    </footer>
+
+  </main>
+</div>

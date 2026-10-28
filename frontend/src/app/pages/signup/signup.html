@@ -1,0 +1,107 @@
+<div class="signup-page">
+  <div class="signup-card">
+
+    <div class="brand">
+      <div class="brand-icon">T</div>
+      <h1>TestForge</h1>
+      <p>Machine Test Application</p>
+    </div>
+
+    <!-- Registration form -->
+    <ng-container *ngIf="!otpStep">
+
+      <div class="form-heading">
+        <h2>Create your account</h2>
+        <p>Enter your details to get started.</p>
+      </div>
+
+      <form (ngSubmit)="onSignup()" #signupForm="ngForm">
+
+        <div class="form-group">
+          <label for="username">Username</label>
+          <input id="username" type="text" name="username" [(ngModel)]="username" placeholder="Choose a username"
+            minlength="8" maxlength="50" autocomplete="username" required />
+          <small>8–50 characters</small>
+        </div>
+
+        <div class="form-group">
+          <label for="email">Email</label>
+          <input id="email" type="email" name="email" [(ngModel)]="email" placeholder="Enter your email"
+            autocomplete="email" required />
+        </div>
+
+        <div class="form-group">
+          <label for="password">Password</label>
+          <input id="password" type="password" name="password" [(ngModel)]="password" placeholder="Create a password"
+            minlength="8" maxlength="12" autocomplete="new-password" required />
+          <small>
+            8–12 characters with uppercase, lowercase, number,
+            and special character
+          </small>
+        </div>
+
+        <div class="form-group">
+          <label for="userType">Account type</label>
+          <select id="userType" name="userType" [(ngModel)]="userType" required>
+            <option value="STANDARD_USER">Standard User</option>
+            <option value="ADMINISTRATOR">Administrator</option>
+          </select>
+        </div>
+
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <div class="success-message" *ngIf="successMessage">
+          {{ successMessage }}
+        </div>
+
+        <button type="submit" [disabled]="isLoading || signupForm.invalid">
+          {{ isLoading ? 'Creating account...' : 'Create account' }}
+        </button>
+
+      </form>
+
+      <div class="login-link">
+        Already have an account?
+        <a routerLink="/login">Sign in</a>
+      </div>
+
+    </ng-container>
+
+    <!-- OTP verification form -->
+    <ng-container *ngIf="otpStep">
+
+      <div class="form-heading">
+        <h2>Verify your email</h2>
+        <p>Enter the OTP generated for {{ email }}.</p>
+        <p>Check your Spring Boot Auth Service console.</p>
+      </div>
+
+      <form (ngSubmit)="onVerifyOtp()" #otpForm="ngForm">
+
+        <div class="form-group">
+          <label for="otp">Verification code</label>
+
+          <input id="otp" type="text" name="otp" [(ngModel)]="otp" placeholder="Enter 6-digit OTP" inputmode="numeric"
+            pattern="[0-9]{6}" minlength="6" maxlength="6" autocomplete="one-time-code" required />
+        </div>
+
+        <div class="error-message" *ngIf="errorMessage">
+          {{ errorMessage }}
+        </div>
+
+        <div class="success-message" *ngIf="successMessage">
+          {{ successMessage }}
+        </div>
+
+        <button type="submit" [disabled]="isLoading || otpForm.invalid">
+          {{ isLoading ? 'Verifying...' : 'Verify OTP' }}
+        </button>
+
+      </form>
+
+    </ng-container>
+
+  </div>
+</div>

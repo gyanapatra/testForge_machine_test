@@ -1,0 +1,25 @@
+server:
+  port: 8081
+spring:
+  application:
+    name: auth-service
+  datasource:
+    url: '${DB_URL:jdbc:postgresql://localhost:5432/testforge}'
+    username: ${DB_USERNAME}
+    password: ${DB_PASSWORD}
+  jpa:
+    hibernate:
+      ddl-auto: update
+    open-in-view: false
+    properties:
+      hibernate:
+        format_sql: true
+security:
+  jwt:
+    secret: ${JWT_SECRET}
+    expiration-ms: 3600000
+app:
+  blocked-countries: 'SY,AF,IR'
+springdoc:
+  swagger-ui:
+    path: /swagger-ui.html
